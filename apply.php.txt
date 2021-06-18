@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>Application Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<h3 align="center">Course Application Form</h3>
+<div align="center">
+  <h3>(for First-Come-First-Served Courses) </h3>
+</div>
+<hr>
+<h3>Pls fill in the form below to enroll :</h3>
+<hr>
+<form method="post" action="apply.php">
+  <table width="75%" border="0">
+    <tr> 
+      <td width="37%" height="39">Course No To enroll:</td>
+      <td width="63%" height="39"> 
+        <input type="text" name="courseno" size="4" maxlength="4">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%">Name :</td>
+      <td width="63%">
+        <input type="text" name="name">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%">Staff/student ID :</td>
+      <td width="63%">
+        <input type="text" name="stid">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%" height="32"> 
+        <p>HKID (Just the 6 digits) :</p>
+      </td>
+      <td width="63%" height="32">
+        <input type="text" name="hkid" size="6" maxlength="6">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%">Email address : </td>
+      <td width="63%">
+        <input type="text" name="email">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%" height="28">Contact Tel : </td>
+      <td width="63%" height="28">
+        <input type="text" name="tel">
+      </td>
+    </tr>
+  </table>
+  <hr>
+  <BR>
+  <input type="submit" name="Submit" value="Submit">
+  <input type="reset" name="reset" value="Reset">
+</form>
+<p>&nbsp;</p>
+<br>
+
+
+
+<?php
+
+define('DBSERVER',"172.16.151.2");
+define('DBUSER',"coursedb");
+define('DBPASS',"m16_ak47");
+define('DATABASE',"coursedb");
+
+if (!$connection = @ mysql_connect(DBSERVER, DBUSER, DBPASS, DATABASE))
+{  die("Cannot connect");
+}
+@mysql_select_db(DATABASE) or die( "Unable to select database");
+$query="SELECT *FROM applytbl;";
+$result = mysql_query($query);
+$count = $_POST['courseno'];
+$num = mysql_numrows($result);
+
+
+$count = $count*1000+$num;
+$name = $_POST['name'];
+$studentid = $_POST['stid'];
+$id = $_POST['hkid'];
+$email = $_POST['email'];
+$phone = $_POST['tel'];
+
+
+$result = mysql_query($query);
+$result= mysql_query($query_check);
+$ans = mysql_numrows($result);
+
+
+
+
+$error = false;
+
+
+if(empty($_POST['courseno'])){
+$error = true;
+}
+if(empty($_POST['name'])){
+$error = true;
+}
+if(empty($_POST['stid'])&&is_int($studentid)!=false){
+$error = true;
+}
+if(empty($_POST['hkid'])&&is_int($id)!=false){
+$error = true;
+}
+if(empty($_POST['email'])){
+$error = true;
+}
+if(empty($_POST['tel'])&&is_int($phone)!=false){
+$error = true;
+}
+
+if(isset($_POST['Submit'])&&$error==false){
+$sql = "INSERT INTO applytbl (applyno ,name ,studentid ,hkid ,email ,tel ) VALUES ('$count', '$name', '$studentid', '$id', '$email', '$phone')";
+
+
+$result = mysql_query($sql)or die(mysql_error());
+mysql_close();
+
+print "your apply no: $count";
+}else{
+
+}
+?>
+
+<br><p>Click here to return to <a href="course.php">Course Page</a>.</p>
+
+</body>
+</html>

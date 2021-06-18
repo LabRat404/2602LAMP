@@ -1,0 +1,152 @@
+Put change.php source code below:
+
+<html>
+<head>
+<title>Application Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<h3 align="center">Course Application Change Form</h3>
+<div align="center"> 
+  <hr>
+  <h3 align="left">Pls fill in the form to retrieve your application form :</h3>
+</div>
+<hr>
+<form method="post" action="">
+  <table width="75%" border="0">
+    <tr> 
+      <td width="37%" height="39">Application Number :</td>
+      <td width="63%" height="39"> 
+        <input type="text" name="applyno" size="7" maxlength="7">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%" height="32"> 
+        <p>HKID (Just the 6 digits) :</p>
+      </td>
+      <td width="63%" height="32"> 
+        <input type="text" name="hkid" size="7" maxlength="6">
+      </td>
+    </tr>
+
+    <tr> 
+      <td width="37%" height="25"> 
+        <p>New email adress :</p>
+      </td>
+      <td width="63%" height="25"> 
+        <input type="text" name="email" size="20" maxlength="20">
+      </td>
+    </tr>
+    <tr> 
+      <td width="37%" height="18"> 
+        <p>New phone no :</p>
+      </td>
+      <td width="63%" height="18"> 
+        <input type="text" name="phone" size="7" maxlength="8">
+      </td>
+    </tr>
+
+
+
+ 
+  </table>
+  <hr>
+  <BR>
+  <input type="submit" name="Submit" value="Submit">
+  <input type="reset" name="reset" value="Reset">
+</form>
+
+
+<br><p>Click here to return to <a href="course.php">Course Page</a>.</p>
+
+
+<p>&nbsp;</p>
+
+<?php
+
+define('DBSERVER',"172.16.151.2");
+define('DBUSER',"coursedb");
+define('DBPASS',"m16_ak47");
+define('DATABASE',"coursedb");
+
+if (!$connection = @ mysql_connect(DBSERVER, DBUSER, DBPASS, DATABASE))
+die("Cannot connect");
+
+@mysql_select_db(DATABASE) or die( "Unable to select database");
+
+$query="SELECT *FROM applytbl;";
+$result = mysql_query($query);
+$count = $_POST['courseno'];
+$num = mysql_numrows($result);
+$count = $count*1000+$num;
+$name = $_POST['name'];
+$studentid = $_POST['stid'];
+$hkid = $_POST['hkid'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$applyno = $_POST['applyno'];
+
+$query_check ="SELECT *FROM applytbl WHERE  applyno ='$applyno' AND hkid = '$hkid';";
+
+$result = mysql_query($query_check);
+$ans=mysql_numrows($result);
+if($ans!=0){
+;}
+
+if($ans ==0){
+	echo"Please Enter your application number and hkid before changing a new info. A message will pop up if change made successfully. ";
+die();
+
+}
+$query ="UPDATE applytbl SET email ='$email', tel ='$phone' WHERE applyno ='$applyno' AND hkid = '$hkid';";
+mysql_query($query);
+
+if($ans ==0){
+	echo"wrong ";
+die();
+}else{
+$sql = "SELECT *FROM applytbl WHERE applyno = '$applyno' AND hkid = '$hkid'";
+if(mysql_query($sql)){
+
+$new_email = mysql_result($sql, 0, "email");
+$new_tal =  mysql_result($sql, 0, "tel");
+echo "updated ";
+print"app no : $applyno successfully.";
+
+
+}
+}
+
+
+mysql_close();
+?>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
